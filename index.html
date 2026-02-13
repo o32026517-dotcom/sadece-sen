@@ -1,0 +1,250 @@
+﻿<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sadece Sen</title>
+<meta name="theme-color" content="#0b0f19" />
+<style>
+  :root{--bg:#0b0f19;--card:rgba(18,26,44,.86);--text:#eef2ff;--muted:#cfd6ff;--a:#7c5cff;--b:#ff4fd8;}
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; display:flex; justify-content:center; align-items:center; overflow:hidden;
+    background:
+      radial-gradient(1100px 900px at 10% 10%, rgba(124,92,255,.22), transparent 60%),
+      radial-gradient(900px 700px at 90% 15%, rgba(255,79,216,.16), transparent 58%),
+      var(--bg);
+    color:var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  }
+
+  /* 💗 KALPLER */
+  .hearts{position:fixed; inset:0; pointer-events:none; z-index:0;}
+  .heart{
+    position:absolute; top:110%;
+    opacity:0;
+    animation: floatUp linear infinite;
+    filter: drop-shadow(0 14px 12px rgba(0,0,0,.35));
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) translateX(0) scale(.9) rotate(0); opacity:0}
+    10%{opacity:.55}
+    100%{transform:translateY(-140vh) translateX(60px) scale(1.25) rotate(18deg); opacity:0}
+  }
+
+  .card{
+    width:min(390px, 92vw);
+    background: linear-gradient(180deg, rgba(18,26,44,.92), rgba(18,26,44,.78));
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:24px;
+    padding:22px;
+    box-shadow:0 22px 85px rgba(0,0,0,.55);
+    backdrop-filter: blur(12px);
+    text-align:center;
+    position:relative;
+    z-index:2;
+  }
+
+  h1{margin:0 0 8px; font-size:26px;}
+  p{margin:0; color:rgba(238,242,255,.72); line-height:1.55; font-size:14.8px;}
+
+  .box{
+    margin-top:12px;
+    padding:12px 14px;
+    border-radius:16px;
+    border:1px dashed rgba(255,255,255,.16);
+    background: rgba(0,0,0,.20);
+    text-align:left;
+    font-size:14.6px;
+    color: rgba(238,242,255,.92);
+    min-height: 44px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .icon{opacity:.9}
+
+  button{
+    margin-top:14px;
+    width:100%;
+    padding:14px 18px;
+    border:none;
+    border-radius:18px;
+    background: linear-gradient(90deg, var(--a), var(--b));
+    color:#0b0f19;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 14px 35px rgba(124,92,255,.18);
+  }
+  button:active{transform:translateY(1px)}
+
+  #mektup{
+    display:none;
+    margin-top:14px;
+    padding:14px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.18);
+    font-size:17px;
+    line-height:1.65;
+    animation: pop .6s ease;
+    white-space:pre-wrap;
+    text-align:left;
+  }
+  @keyframes pop{
+    from{opacity:0; transform: translateY(10px) scale(.985); filter: blur(1px);}
+    to{opacity:1; transform: translateY(0) scale(1); filter: blur(0);}
+  }
+
+  .status{margin-top:10px; font-size:12px; color: rgba(238,242,255,.55); text-align:left;}
+  .ok{color: rgba(86,255,199,.85);}
+  .warn{color: rgba(255,79,216,.90);}
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="card">
+  <h1>Sadece Sen</h1>
+  <p>Sadece senin girebileceğin bir sayfa yapmak istedim…</p>
+
+  <div class="box"><span class="icon">✨</span><span id="complimentTxt">Yükleniyor…</span></div>
+  <div class="box"><span class="icon">💌</span><span id="dailyTxt">Yükleniyor…</span></div>
+
+  <button onclick="openLetter()">💌 Mektubu Aç</button>
+
+  <div id="mektup"></div>
+
+  
+</div>
+
+<audio id="music" preload="auto">
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  // ==== 16 saatlik döngü ====
+  const PERIOD_MS = 16 * 60 * 60 * 1000;
+
+  const compliments = [
+    "Sesin, içimde ‘tamam’ diyen bir huzur.",
+    "Gülüşün, günün bütün sertliğini yumuşatıyor.",
+    "Sen yanımdayken her şey daha kolay.",
+    "Sana bakınca içim sakinleşiyor.",
+    "Sen, benim en güzel alışkanlığımsın.",
+    "Varlığın, kalbime iyi geliyor.",
+    "Seninle konuşmak bile günümü güzelleştiriyor.",
+    "Gözlerin, içimdeki gürültüyü susturuyor.",
+    "Sen olduğunda dünya daha yumuşak.",
+    "İyi ki varsın… her seferinde yeniden."
+  ];
+
+  const letters = [
+`İyi ki varsın sevgilim.
+Bugün de seni düşününce içim yumuşadı.
+Bu sayfa: sadece sen.`,
+`Sana yeni bir mektubum var :)
+Gülüşün var ya… insanın içini toparlıyor.
+İyi ki varsın sevgilim.`,
+`Bazen tek bir cümle yetiyor:
+“Sen” dediğimde her şey yerine oturuyor.
+İyi ki varsın.`,
+`Şunu bil:
+Benim için en güzel şey “an” değil…
+o anın içinde senin olman.`,
+`Kısa ama gerçek:
+Sen benim en güzel “iyi ki”msin. 🌹`
+  ];
+
+  function slotIndex(){
+    return Math.floor(Date.now() / PERIOD_MS);
+  }
+
+  function getFromRotation(key, arr){
+    const slot = slotIndex();
+    const savedSlot = parseInt(localStorage.getItem(key+"_slot") || "-1", 10);
+    if(savedSlot !== slot){
+      const val = arr[slot % arr.length];
+      localStorage.setItem(key+"_slot", String(slot));
+      localStorage.setItem(key+"_val", val);
+      return val;
+    }
+    return localStorage.getItem(key+"_val") || arr[0];
+  }
+
+  // 💗 Kalpler (hemen üret)
+  (function seedHearts(){
+    const box = document.getElementById("hearts");
+    box.innerHTML = "";
+    const count = 26;
+    for(let i=0;i<count;i++){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = (Math.random() < 0.75) ? "💗" : (Math.random() < 0.5 ? "💖" : "💜");
+      h.style.left = (Math.random()*100) + "%";
+      h.style.fontSize = (14 + Math.random()*22) + "px";
+      const dur = 10 + Math.random()*12;
+      h.style.animationDuration = dur + "s";
+      h.style.animationDelay = (-Math.random()*dur) + "s";
+      box.appendChild(h);
+    }
+  })();
+
+  // Metinleri bas (hemen)
+  function refreshTexts(){
+    document.getElementById("complimentTxt").textContent = getFromRotation("compliment", compliments);
+    document.getElementById("dailyTxt").textContent = "Her gün senin için yeni bir mektubum olacak sana )))";
+  }
+  refreshTexts();
+
+  // song.mp3 var mı kontrol (net mesaj)
+  (async function checkSong(){
+    const status = document.getElementById("status");
+    try{
+      const r = await fetch("song.mp3", {method:"HEAD", cache:"no-store"});
+      if(r.ok){
+        status.textContent = "JS Çalışıyor ✅ | Müzik: hazır (Mektubu Aç'a basınca başlayacak)";
+        status.className = "status ok";
+      }else{
+        status.textContent = "JS Çalışıyor ✅ | Müzik: song.mp3 bulunamadı";
+        status.className = "status warn";
+      }
+    }catch(e){
+      status.textContent = "JS Çalışıyor ✅ | Müzik: kontrol edilemedi";
+      status.className = "status warn";
+    }
+  })();
+
+  // Buton fonksiyonu (global kalsın)
+  async function openLetter(){
+    const mektup = document.getElementById("mektup");
+    mektup.style.display = "block";
+    mektup.textContent = "İyi ki varsın sevgilim";
+
+    const audio = document.getElementById("music");
+    const status = document.getElementById("status");
+
+    try{
+      audio.currentTime = 0;
+      await audio.play();
+      status.textContent = "Müzik: açık 🔊";
+      status.className = "status ok";
+    }catch(e){
+      status.textContent = "Müzik: açılamadı (song.mp3 yok / izin yok)";
+      status.className = "status warn";
+    }
+  }
+  window.openLetter = openLetter;
+
+  // 16 saat dolunca (sayfa açıkken) otomatik güncelle
+  setInterval(() => {
+    const nowSlot = String(slotIndex());
+    if(localStorage.getItem("compliment_slot") !== nowSlot){
+      refreshTexts();
+    }
+  }, 60000);
+</script>
+
+</body>
+</html>
