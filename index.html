@@ -6,98 +6,131 @@
 <title>Sadece Sen</title>
 <meta name="theme-color" content="#0b0f19" />
 <style>
-:root{--bg:#0b0f19;--card:rgba(18,26,44,.86);--text:#eef2ff;--a:#7c5cff;--b:#ff4fd8}
+:root{--bg:#0b0f19;--text:#eef2ff;--a:#7c5cff;--b:#ff4fd8}
 *{box-sizing:border-box}
 body{
-margin:0;min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;
-background:
-radial-gradient(1100px 900px at 10% 10%, rgba(124,92,255,.22), transparent 60%),
-radial-gradient(900px 700px at 90% 15%, rgba(255,79,216,.16), transparent 58%),
-var(--bg);
-color:var(--text);
-font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  margin:0;min-height:100vh;display:flex;justify-content:center;align-items:center;overflow:hidden;
+  background:
+    radial-gradient(1100px 900px at 10% 10%, rgba(124,92,255,.22), transparent 60%),
+    radial-gradient(900px 700px at 90% 15%, rgba(255,79,216,.16), transparent 58%),
+    var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
 }
-.hearts{position:fixed;inset:0;pointer-events:none;z-index:0}
-.heart{position:absolute;top:110%;opacity:0;animation:floatUp linear infinite}
+
+/* 💗 KALPLER (mobilde daha belirgin) */
+.hearts{position:fixed;inset:0;pointer-events:none;z-index:1;}
+.heart{
+  position:absolute; top:110%;
+  opacity:0;
+  animation:floatUp linear infinite;
+  filter: drop-shadow(0 18px 14px rgba(0,0,0,.55));
+  will-change: transform, opacity;
+}
 @keyframes floatUp{
-0%{transform:translateY(0) scale(.9);opacity:0}
-10%{opacity:.6}
-100%{transform:translateY(-140vh) scale(1.2);opacity:0}
+  0%{transform:translateY(0) translateX(0) scale(.95) rotate(0deg);opacity:0}
+  10%{opacity:.85}
+  100%{transform:translateY(-140vh) translateX(80px) scale(1.35) rotate(18deg);opacity:0}
 }
+
 .card{
-width:min(390px,92vw);
-background:rgba(18,26,44,.9);
-border-radius:24px;
-padding:22px;
-text-align:center;
-box-shadow:0 22px 85px rgba(0,0,0,.55);
-z-index:2;
+  width:min(390px,92vw);
+  background:rgba(18,26,44,.90);
+  border-radius:24px;
+  padding:22px;
+  text-align:center;
+  box-shadow:0 22px 85px rgba(0,0,0,.55);
+  z-index:2;
+  position:relative;
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(10px);
 }
 h1{margin:0 0 8px;font-size:26px}
-p{margin:0;color:rgba(238,242,255,.7);font-size:14.8px}
+p{margin:0;color:rgba(238,242,255,.72);font-size:14.8px;line-height:1.55}
 .box{
-margin-top:12px;
-padding:12px 14px;
-border-radius:16px;
-background:rgba(0,0,0,.2);
-text-align:left;
-display:flex;
-gap:10px;
-font-size:14.6px
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:16px;
+  background:rgba(0,0,0,.22);
+  border:1px dashed rgba(255,255,255,.14);
+  text-align:left;
+  display:flex;
+  gap:10px;
+  font-size:14.6px
 }
 button{
-margin-top:14px;width:100%;padding:14px;border:none;border-radius:18px;
-background:linear-gradient(90deg,var(--a),var(--b));
-font-weight:900;cursor:pointer
+  margin-top:14px;width:100%;padding:14px;border:none;border-radius:18px;
+  background:linear-gradient(90deg,var(--a),var(--b));
+  font-weight:900;cursor:pointer;color:#0b0f19;
+  box-shadow:0 14px 35px rgba(124,92,255,.18);
 }
+button:active{transform:translateY(1px)}
 #mektup{
-display:none;margin-top:14px;padding:14px;border-radius:18px;
-background:rgba(0,0,0,.2);font-size:17px;line-height:1.65;
-animation:pop .6s ease;white-space:pre-wrap;text-align:left
+  display:none;margin-top:14px;padding:14px;border-radius:18px;
+  background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.12);
+  font-size:17px;line-height:1.65;
+  animation:pop .6s ease;white-space:pre-wrap;text-align:left
 }
-@keyframes pop{
-from{opacity:0;transform:translateY(10px)}
-to{opacity:1;transform:translateY(0)}
-}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .signature{
-margin-top:18px;
-text-align:right;
-font-family:Georgia,"Times New Roman",serif;
-font-style:italic;
-font-size:18px;
-opacity:0;
-animation:sig .6s ease forwards .3s
+  margin-top:18px;text-align:right;
+  font-family:Georgia,"Times New Roman",serif;
+  font-style:italic;font-size:18px;
+  opacity:0;animation:sig .6s ease forwards .25s
 }
 @keyframes sig{to{opacity:1}}
+
+/* 🌸🌹 Çiçek patlama efekti */
+.burst{position:fixed;inset:0;pointer-events:none;z-index:3;overflow:hidden;}
+.petal{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  opacity:0;
+  animation:burst 900ms ease-out forwards;
+  filter: drop-shadow(0 14px 12px rgba(0,0,0,.45));
+  will-change: transform, opacity;
+}
+@keyframes burst{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.65) rotate(0deg)}
+  12%{opacity:1}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.35) rotate(var(--rot))}
+}
+
+/* Mobilde kalpleri ekstra belirgin yap */
+@media (max-width:520px){
+  .heart{filter: drop-shadow(0 20px 14px rgba(0,0,0,.6));}
+}
 </style>
 </head>
 <body>
 
 <div class="hearts" id="hearts"></div>
+<div class="burst" id="burst"></div>
 
 <div class="card">
-<h1>Sadece Sen</h1>
-<p>Sadece senin girebileceğin bir sayfa yapmak istedim…</p>
+  <h1>Sadece Sen</h1>
+  <p>Sadece senin girebileceğin bir sayfa yapmak istedim…</p>
 
-<div class="box">✨ <span id="complimentTxt">Yükleniyor…</span></div>
-<div class="box">💌 <span id="dailyTxt">Yükleniyor…</span></div>
+  <div class="box">✨ <span id="complimentTxt">Yükleniyor…</span></div>
+  <div class="box">💌 <span id="dailyTxt">Yükleniyor…</span></div>
 
-<button onclick="openLetter()">💌 Mektubu Aç</button>
-<div id="mektup"></div>
+  <button onclick="openLetter()">💌 Mektubu Aç</button>
+  <div id="mektup"></div>
 </div>
 
 <audio id="music">
-<source src="song.mp3" type="audio/mpeg">
+  <source src="song.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 const PERIOD=16*60*60*1000;
 const compliments=[
-"Sesin içimde huzur oluyor.",
-"Gülüşün her şeyi yumuşatıyor.",
-"Sen yanımdayken dünya sakin.",
-"Varlığın kalbime iyi geliyor.",
-"Sen benim en güzel alışkanlığımsın."
+  "Sesin içimde huzur oluyor.",
+  "Gülüşün her şeyi yumuşatıyor.",
+  "Sen yanımdayken dünya sakin.",
+  "Varlığın kalbime iyi geliyor.",
+  "Sen benim en güzel alışkanlığımsın.",
+  "İyi ki varsın… gerçekten."
 ];
 const letters=[
 `İyi ki varsın sevgilim.
@@ -110,36 +143,77 @@ Sen.`,
 `Kısa ama gerçek:
 İyi ki varsın.`
 ];
+
 function slot(){return Math.floor(Date.now()/PERIOD)}
 function rotate(k,a){
-const s=slot(),ls=localStorage.getItem(k+"_s");
-if(ls!=s){localStorage.setItem(k+"_s",s);localStorage.setItem(k+"_v",a[s%a.length])}
-return localStorage.getItem(k+"_v")
+  const s=slot(), ls=localStorage.getItem(k+"_s");
+  if(ls!=s){ localStorage.setItem(k+"_s",s); localStorage.setItem(k+"_v", a[s%a.length]); }
+  return localStorage.getItem(k+"_v") || a[0];
 }
 function refresh(){
-complimentTxt.textContent=rotate("c",compliments);
-dailyTxt.textContent="Her gün senin için yeni bir mektubum olacak 💌";
+  complimentTxt.textContent = rotate("c", compliments);
+  dailyTxt.textContent = "Her gün senin için yeni bir mektubum olacak 💌";
 }
 refresh();
-(function hearts(){
-for(let i=0;i<24;i++){
-const h=document.createElement("div");
-h.className="heart";h.textContent="💗";
-h.style.left=Math.random()*100+"%";
-h.style.fontSize=14+Math.random()*22+"px";
-h.style.animationDuration=10+Math.random()*10+"s";
-h.style.animationDelay=-Math.random()*10+"s";
-hearts.appendChild(h)
-}
+
+/* 💗 Kalpleri mobilde görünür üret */
+(function seedHearts(){
+  hearts.innerHTML="";
+  const count = 44; // daha fazla
+  for(let i=0;i<count;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    // farklı kalpler
+    const r=Math.random();
+    h.textContent = r<0.7 ? "💗" : (r<0.85 ? "💖" : "💜");
+    h.style.left = (Math.random()*100) + "%";
+    // daha büyük ve parlak
+    h.style.fontSize = (18 + Math.random()*28) + "px";
+    const dur = 9 + Math.random()*12;
+    h.style.animationDuration = dur + "s";
+    h.style.animationDelay = (-Math.random()*dur) + "s";
+    h.style.opacity = "0"; // animasyon kontrol ediyor
+    hearts.appendChild(h);
+  }
 })();
-async function openLetter(){
-mektup.style.display="block";
-mektup.innerHTML=
-rotate("l",letters).replace(/\n/g,"<br>")+
-'<div class="signature">Beren ❤️</div>';
-try{music.currentTime=0;await music.play()}catch(e){}
+
+/* 🌸 çiçek patlaması */
+function flowerBurst(){
+  burst.innerHTML = "";
+  const n = 34;
+  for(let i=0;i<n;i++){
+    const s=document.createElement("span");
+    s.className="petal";
+    s.textContent = (Math.random()<0.75) ? "🌹" : "🌸";
+    const ang = Math.random()*Math.PI*2;
+    const dist = 120 + Math.random()*260;
+    const dx = Math.cos(ang)*dist;
+    const dy = Math.sin(ang)*dist;
+    s.style.setProperty("--dx", dx+"px");
+    s.style.setProperty("--dy", dy+"px");
+    s.style.setProperty("--rot", (Math.random()*720-360) + "deg");
+    s.style.fontSize = (18 + Math.random()*22) + "px";
+    s.style.animationDelay = (Math.random()*120) + "ms";
+    burst.appendChild(s);
+  }
 }
+
+async function openLetter(){
+  mektup.style.display="block";
+  mektup.innerHTML =
+    rotate("l", letters).replace(/\n/g,"<br>") +
+    '<div class="signature">Beren ❤️</div>';
+
+  // Çiçek efekti: mektup açılınca patlasın
+  flowerBurst();
+
+  try{ music.currentTime=0; await music.play(); }catch(e){}
+}
+
 setInterval(refresh,60000);
+
+// Ek: mektubun üstüne tıklayınca da patlasın
+mektup.addEventListener("click", flowerBurst);
 </script>
 
 </body>
