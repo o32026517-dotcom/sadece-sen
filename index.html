@@ -95,10 +95,6 @@
     from{opacity:0; transform: translateY(10px) scale(.985); filter: blur(1px);}
     to{opacity:1; transform: translateY(0) scale(1); filter: blur(0);}
   }
-
-  .status{margin-top:10px; font-size:12px; color: rgba(238,242,255,.55); text-align:left;}
-  .ok{color: rgba(86,255,199,.85);}
-  .warn{color: rgba(255,79,216,.90);}
 </style>
 </head>
 <body>
@@ -115,8 +111,6 @@
   <button onclick="openLetter()">💌 Mektubu Aç</button>
 
   <div id="mektup"></div>
-
-  
 </div>
 
 <audio id="music" preload="auto">
@@ -173,7 +167,7 @@ Sen benim en güzel “iyi ki”msin. 🌹`
     return localStorage.getItem(key+"_val") || arr[0];
   }
 
-  // 💗 Kalpler (hemen üret)
+  // 💗 Kalpler
   (function seedHearts(){
     const box = document.getElementById("hearts");
     box.innerHTML = "";
@@ -191,53 +185,33 @@ Sen benim en güzel “iyi ki”msin. 🌹`
     }
   })();
 
-  // Metinleri bas (hemen)
+  // Üst kutuları bas
   function refreshTexts(){
     document.getElementById("complimentTxt").textContent = getFromRotation("compliment", compliments);
     document.getElementById("dailyTxt").textContent = "Her gün senin için yeni bir mektubum olacak sana )))";
   }
   refreshTexts();
 
-  // song.mp3 var mı kontrol (net mesaj)
-  (async function checkSong(){
-    const status = document.getElementById("status");
-    try{
-      const r = await fetch("song.mp3", {method:"HEAD", cache:"no-store"});
-      if(r.ok){
-        status.textContent = "JS Çalışıyor ✅ | Müzik: hazır (Mektubu Aç'a basınca başlayacak)";
-        status.className = "status ok";
-      }else{
-        status.textContent = "JS Çalışıyor ✅ | Müzik: song.mp3 bulunamadı";
-        status.className = "status warn";
-      }
-    }catch(e){
-      status.textContent = "JS Çalışıyor ✅ | Müzik: kontrol edilemedi";
-      status.className = "status warn";
-    }
-  })();
-
-  // Buton fonksiyonu (global kalsın)
+  // Mektup aç + müzik başlat
   async function openLetter(){
     const mektup = document.getElementById("mektup");
     mektup.style.display = "block";
-    mektup.textContent = "İyi ki varsın sevgilim";
+
+    const todaysLetter = getFromRotation("letter", letters);
+    // ✅ İmza: Beren ❤️
+    mektup.textContent = todaysLetter + "\n\nBeren ❤️";
 
     const audio = document.getElementById("music");
-    const status = document.getElementById("status");
-
     try{
       audio.currentTime = 0;
       await audio.play();
-      status.textContent = "Müzik: açık 🔊";
-      status.className = "status ok";
     }catch(e){
-      status.textContent = "Müzik: açılamadı (song.mp3 yok / izin yok)";
-      status.className = "status warn";
+      // sessizce geç (mobil izin yoksa)
     }
   }
   window.openLetter = openLetter;
 
-  // 16 saat dolunca (sayfa açıkken) otomatik güncelle
+  // 16 saatte bir değişim (sayfa açıkken)
   setInterval(() => {
     const nowSlot = String(slotIndex());
     if(localStorage.getItem("compliment_slot") !== nowSlot){
